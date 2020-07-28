@@ -11,6 +11,7 @@ class CalculatorViewController: UIViewController {
     var tip = 0.10
     var split = 2
     var totalBill: Double?
+    var billPerPerson = "0.00"
     
     @IBAction func tipChanged(_ sender: UIButton) {
         
@@ -29,19 +30,33 @@ class CalculatorViewController: UIViewController {
         tip = selectedDouble / 100
     }
     
+    
     @IBAction func stepperValueChanged(_ sender: UIStepper) {
         splitNumberLabel.text = String(format: "%.0f", sender.value)
         
         split = Int(sender.value)
     }
     
+    
     @IBAction func calculatePressed(_ sender: UIButton) {
         totalBill = Double(billTextField.text!)
         
         if let nonOpBill = totalBill {
-            print(String(format: "%.2f", nonOpBill * (tip + 1) / Double(split)))
+            billPerPerson = String(format: "%.2f", nonOpBill * (tip + 1) / Double(split))
         }else {
             print("입력받은 총 비용이 nil 값이에유!!")
+        }
+        
+        self.performSegue(withIdentifier: "goToResults", sender: self)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToResults" {
+            let destinationVC = segue.destination as! ResultsViewController
+            destinationVC.result = billPerPerson
+            destinationVC.tip = Int(tip * 100)
+            destinationVC.split = split
         }
     }
     
