@@ -10,8 +10,12 @@ class CalculatorViewController: UIViewController {
     
     var tip = 0.10
     var split = 2
+    var totalBill: Double?
     
     @IBAction func tipChanged(_ sender: UIButton) {
+        
+        billTextField.endEditing(true)  // touch tip buttons to dismiss keyboard
+        
         zeroPctButton.isSelected = false
         tenPctButton.isSelected = false
         twentyPctButton.isSelected = false
@@ -32,7 +36,13 @@ class CalculatorViewController: UIViewController {
     }
     
     @IBAction func calculatePressed(_ sender: UIButton) {
-        print(split)
+        totalBill = Double(billTextField.text!)
+        
+        if let nonOpBill = totalBill {
+            print(String(format: "%.2f", nonOpBill * (tip + 1) / Double(split)))
+        }else {
+            print("입력받은 총 비용이 nil 값이에유!!")
+        }
     }
     
 }
